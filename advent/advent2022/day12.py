@@ -4,7 +4,7 @@ from collections.abc import Callable, Iterator
 import numpy as np
 import numpy.typing as npt
 
-from advent2022.utils.utils import Advent
+from advent.utils.utils import Advent
 
 advent = Advent(12)
 

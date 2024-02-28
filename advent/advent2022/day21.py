@@ -3,7 +3,7 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from advent2022.utils.utils import Advent
+from advent.utils.utils import Advent
 
 advent = Advent(21)
 

@@ -2,7 +2,7 @@ import re
 from collections import deque
 from math import prod
 
-from advent2022.utils.utils import Advent
+from advent.utils.utils import Advent
 
 advent = Advent(19)
 
