@@ -28,7 +28,7 @@ def main():
     advent.submit(2, c)
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 def search(row: str, idx: int, broken: tuple[int, ...], chunk_length: int) -> int:
     """
     Search number of possible combinations for row[idx:] given the remaining broken chunks
