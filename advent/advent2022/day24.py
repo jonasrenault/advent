@@ -34,10 +34,11 @@ def bfs(
 ) -> tuple[int, set[tuple[int, int, str]]]:
     positions = {start}
     time = 0
+    valley_shape = (valley.shape[0], valley.shape[1])
 
     while end not in positions:
         time += 1
-        blizzards = move_blizzards(blizzards, valley.shape)
+        blizzards = move_blizzards(blizzards, valley_shape)
         positions = set(advance(valley, blizzard_positions(blizzards), positions))
 
     return time, blizzards
