@@ -1,4 +1,4 @@
-# Advent of Code 2022
+# Advent of Code
 
 Repository of my code for [Advent of Code](https://adventofcode.com/)
 
