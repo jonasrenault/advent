@@ -7,82 +7,173 @@ from advent.utils.utils import Advent
 
 advent = Advent(22)
 
-chr_to_int = {" ": 1, ".": 0, "#": 2}
-dirs = {
-    0: (0, 1),  # >
-    1: (1, 0),  # v
-    2: (0, -1),  # <
-    3: (-1, 0),  # ^
-}
+WALL = "#"
+FREE = "."
+EMPTY = " "
+RIGHT, DOWN, LEFT, UP = range(4)
+
+DIRMAP = [
+    (0, 1),
+    (1, 0),
+    (0, -1),
+    (-1, 0),
+]
+
+FACES = (
+    (1, 50, 51, 100),
+    (1, 50, 101, 150),
+    (51, 100, 51, 100),
+    (101, 150, 1, 50),
+    (101, 150, 51, 100),
+    (151, 200, 1, 50),
+)
 
 
 def main():
     input = advent.get_input()
     lines = input.rstrip("\n").split("\n")
-    board = get_board(lines[:-2])
+    board = get_padded_board(lines[:-2])
     instructions = lines[-1]
-    advent.submit(1, run_instructions(board, instructions))
+
+    advent.submit(1, walk_grid(board, instructions))
+    advent.submit(2, walk_cube(board, instructions))
 
 
-def run_instructions(board: npt.NDArray[np.int_], instructions: str) -> int:
-    dir = 0
-    pos = (0, np.where(board[0, :] != 1)[0].min())
-    ii = re.split("([LR])", instructions)
-    for i in ii:
-        try:
-            i = int(i)
-            pos = move(board, pos, dir, i)
-        except ValueError:
-            dir = (dir + 1) % 4 if i == "R" else (dir - 1) % 4
-        except IndexError as e:
-            print(board, pos, dir, i)
-            raise e
-    return 1000 * (pos[0] + 1) + 4 * (pos[1] + 1) + dir
+def walk_cube(board: npt.NDArray[np.str_], instructions: str) -> int:
+    d = RIGHT
+    r = 1
+    c = np.where(board[1, :] != EMPTY)[0].min()
+    moves = re.split("([LR])", instructions)
 
-
-def move(
-    board: npt.NDArray[np.int_], pos: tuple[int, int], dir: int, units: int
-) -> tuple[int, int]:
-    if units == 0:
-        return pos
-
-    n = neighbor(board, pos, dir)
-    if board[n] == 2:
-        return pos
-
-    return move(board, n, dir, units - 1)
-
-
-def neighbor(
-    board: npt.NDArray[np.int_], pos: tuple[int, int], dir: int
-) -> tuple[int, int]:
-    d = dirs[dir]
-    n = (pos[0] + d[0], pos[1] + d[1])
-    if (
-        n[0] >= board.shape[0]
-        or n[0] < 0
-        or n[1] < 0
-        or n[1] >= board.shape[1]
-        or board[n] == 1
-    ):
-        if dir == 0:
-            n = (n[0], np.where(board[n[0], :] != 1)[0].min())
-        elif dir == 2:
-            n = (n[0], np.where(board[n[0], :] != 1)[0].max())
-        elif dir == 1:
-            n = (np.where(board[:, n[1]] != 1)[0].min(), n[1])
+    for move in moves:
+        if move == "L":
+            d = (d - 1) % 4
+        elif move == "R":
+            d = (d + 1) % 4
         else:
-            n = (np.where(board[:, n[1]] != 1)[0].max(), n[1])
-    return n
+            for _ in range(int(move)):
+                newr, newc, newd = move_cube(board, r, c, d)
+                if board[newr][newc] == WALL:
+                    break
+
+                r, c, d = newr, newc, newd
+
+    return 1000 * r + 4 * c + d
 
 
-def get_board(lines: list[str]) -> npt.NDArray[np.int_]:
+def face(r: int, c: int) -> tuple[int, int, int]:
+    for face_id, (rmin, rmax, cmin, cmax) in enumerate(FACES, 1):
+        if rmin <= r <= rmax and cmin <= c <= cmax:
+            return face_id, r - rmin + 1, c - cmin + 1
+    return -1, r, c
+
+
+def move_cube(
+    board: npt.NDArray[np.str_], r: int, c: int, dir: int
+) -> tuple[int, int, int]:
+    dr, dc = DIRMAP[dir]
+    newr = r + dr
+    newc = c + dc
+
+    if board[newr, newc] != EMPTY:
+        return newr, newc, dir
+
+    # We fell off an edge, we need to wrap to another face...
+    face_id, fr, fc = face(r, c)
+    # fr = face-relative row (from the top left of the face)
+    # fc = face-relative column (from the top left of the face)
+
+    if face_id == 1:
+        if dir == UP:  # face 6 going right
+            return fc + 150, 1, RIGHT
+        # direction == LEFT        -> face 4 going right
+        return (51 - fr) + 100, 1, RIGHT
+
+    if face_id == 2:
+        if dir == UP:  # face 6 going up
+            return 200, fc, UP
+        if dir == DOWN:  # face 3 going left
+            return fc + 50, 100, LEFT
+        # direction == RIGHT       -> face 5 going left
+        return (51 - fr) + 100, 100, LEFT
+
+    if face_id == 3:
+        if dir == LEFT:  # face 4 going down
+            return 101, fr, DOWN
+        # direction == RIGHT       -> face 2 going up
+        return 50, fr + 100, UP
+
+    if face_id == 4:
+        if dir == UP:  # face 3 going right
+            return fc + 50, 51, RIGHT
+        # direction == LEFT        -> face 1 going right
+        return (51 - fr), 51, RIGHT
+
+    if face_id == 5:
+        if dir == RIGHT:  # face 2 going left
+            return (51 - fr), 150, LEFT
+        # direction == DOWN        -> face 6 going left
+        return fc + 150, 50, LEFT
+
+    # face_id == 6
+    if dir == LEFT:  # face 1 going down
+        return 1, fr + 50, DOWN
+    if dir == RIGHT:  # face 5 going up
+        return 150, fr + 50, UP
+    else:  # direction == DOWN      -> face 2 going down
+        return 1, fc + 100, DOWN
+
+
+def walk_grid(board: npt.NDArray[np.str_], instructions: str) -> int:
+    d = RIGHT
+    r = 1
+    c = np.where(board[1, :] != EMPTY)[0].min()
+    moves = re.split("([LR])", instructions)
+
+    for move in moves:
+        if move == "L":
+            d = (d - 1) % 4
+        elif move == "R":
+            d = (d + 1) % 4
+        else:
+            for _ in range(int(move)):
+                newr, newc, newd = move_grid(board, r, c, d)
+                if board[newr][newc] == WALL:
+                    break
+
+                r, c, d = newr, newc, newd
+
+    return 1000 * r + 4 * c + d
+
+
+def move_grid(
+    board: npt.NDArray[np.str_], r: int, c: int, direction: int
+) -> tuple[int, int, int]:
+    dr, dc = DIRMAP[direction]
+    r += dr
+    c += dc
+
+    if board[r][c] == EMPTY:
+        if direction == RIGHT:
+            c = np.where(board[r, :] != EMPTY)[0].min()
+        elif direction == LEFT:
+            c = np.where(board[r, :] != EMPTY)[0].max()
+        elif direction == DOWN:
+            r = np.where(board[:, c] != EMPTY)[0].min()
+        else:
+            r = np.where(board[:, c] != EMPTY)[0].max()
+
+    return r, c, direction
+
+
+def get_padded_board(lines: list[str]) -> npt.NDArray[np.str_]:
     max_length = max([len(line) for line in lines])
-    rows = []
+    rows = [[EMPTY] * (max_length + 2)]
     for line in lines:
-        rows.append([chr_to_int[c] for c in line.ljust(max_length, " ")])
+        rows.append([EMPTY] + [c for c in line.ljust(max_length, " ")] + [EMPTY])
 
-    return np.array(rows, dtype=int)
+    rows.append([EMPTY] * (max_length + 2))
+    return np.array(rows, dtype=str)
 
 
 if __name__ == "__main__":
