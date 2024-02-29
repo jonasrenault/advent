@@ -67,7 +67,7 @@ def step(
     T: tuple[int, int],
     s: tuple[str, str],
     positions: set[tuple[int, int]],
-):
+) -> tuple[tuple[int, int], tuple[int, int]]:
     d, u = s
     for _ in range(int(u)):
         new_H = (H[0] + dirs[d][0], H[1] + dirs[d][1])
