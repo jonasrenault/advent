@@ -1,6 +1,6 @@
 from advent.utils.utils import Advent
 
-advent = Advent({{day}})
+advent = Advent({{day}}, {{year}})
 
 
 def main():
