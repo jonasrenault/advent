@@ -18,7 +18,12 @@ def main():
 
     start = (0, 1)
     end = (valley.shape[0] - 1, valley.shape[1] - 2)
-    advent.submit(1, bfs(valley, blizzards, start, end))
+    one_trip, blizzards = bfs(valley, blizzards, start, end)
+    advent.submit(1, one_trip)
+
+    second_trip, blizzards = bfs(valley, blizzards, end, start)
+    third_trip, blizzards = bfs(valley, blizzards, start, end)
+    advent.submit(2, one_trip + second_trip + third_trip)
 
 
 def bfs(
@@ -26,7 +31,7 @@ def bfs(
     blizzards: set[tuple[int, int, str]],
     start: tuple[int, int],
     end: tuple[int, int],
-) -> int:
+) -> tuple[int, set[tuple[int, int, str]]]:
     positions = {start}
     time = 0
 
@@ -35,7 +40,7 @@ def bfs(
         blizzards = move_blizzards(blizzards, valley.shape)
         positions = set(advance(valley, blizzard_positions(blizzards), positions))
 
-    return time
+    return time, blizzards
 
 
 def advance(
