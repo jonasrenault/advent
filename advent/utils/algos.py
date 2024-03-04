@@ -2,6 +2,8 @@ from collections import deque
 from collections.abc import Container, Iterator, Sequence
 from typing import Any
 
+import numpy.typing as npt
+
 deltas_4 = ((-1, 0), (0, -1), (0, 1), (1, 0))
 deltas_8 = (
     (-1, -1),
@@ -16,7 +18,7 @@ deltas_8 = (
 
 
 def neighbors(
-    grid: Sequence[Sequence[Any]], node: tuple[int, int]
+    grid: Sequence[Sequence[Any]] | npt.NDArray[Any], node: tuple[int, int]
 ) -> Iterator[tuple[int, int]]:
     r, c = node
     maxr = len(grid) - 1
