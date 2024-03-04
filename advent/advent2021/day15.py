@@ -42,11 +42,11 @@ def search(
     grid: npt.NDArray[np.int_], start: tuple[int, int], end: tuple[int, int]
 ) -> int:
     visited = set()
-    queue = [(node, grid[node]) for node in neighbors(grid, start)]
+    queue = [(grid[node], node) for node in neighbors(grid, start)]
     distances: defaultdict[tuple[int, int], float] = defaultdict(lambda: inf)
 
     while queue:
-        node, distance = heappop(queue)
+        distance, node = heappop(queue)
 
         if node == end:
             return int(distance)
@@ -58,7 +58,7 @@ def search(
                 new_distance = distance + grid[n]
                 if new_distance < distances[n]:
                     distances[n] = new_distance
-                    heappush(queue, (n, new_distance))
+                    heappush(queue, (new_distance, n))
 
     return -1
 
