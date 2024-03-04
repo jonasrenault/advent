@@ -22,7 +22,7 @@ def main():
 
 def last_winner(
     draws: list[int], boards: list[npt.NDArray[np.int_]]
-) -> tuple[int, npt.NDArray[np.bool_]]:
+) -> tuple[int, npt.NDArray[np.int_]]:
     won: set[int] = set()
     ids = set(range(len(boards)))
     for d in draws:
@@ -39,7 +39,7 @@ def last_winner(
 
 def first_winner(  # type: ignore
     draws: list[int], boards: list[npt.NDArray[np.int_]]
-) -> tuple[int, npt.NDArray[np.bool_]]:
+) -> tuple[int, npt.NDArray[np.int_]]:
     for d in draws:
         for board in boards:
             board[board == d] = -1
