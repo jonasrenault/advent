@@ -11,51 +11,46 @@ def main():
     draws = [int(i) for i in lines[0].split(",")]
     boards = get_boards(lines[2:])
 
-    b, m, d = first_winner(draws, boards)
-    total = d * b[~m].sum()
+    draw, board = first_winner(draws, boards)
+    total = draw * board[board != -1].sum()
     advent.submit(1, total)
 
-    winners, winner_draws = get_winners(draws, boards)
-    d = winner_draws[-1]
-    m, b = winners[-1]
-    total = d * b[~m].sum()
+    draw, board = last_winner(draws, boards)
+    total = draw * board[board != -1].sum()
     advent.submit(2, total)
 
 
-def get_winners(
+def last_winner(
     draws: list[int], boards: list[npt.NDArray[np.int_]]
-) -> tuple[list[tuple[npt.NDArray[np.int_], npt.NDArray[np.bool_]]], list[int]]:
-    masks = [b < 0 for b in boards]
-    winner_draws = []
-    winners = []
+) -> tuple[int, npt.NDArray[np.bool_]]:
+    won: set[int] = set()
+    ids = set(range(len(boards)))
     for d in draws:
-        masks = [m | (b == d) for m, b in zip(masks, boards)]
+        for id in ids - won:
+            board = boards[id]
+            board[board == d] = -1
+            if is_winner(board):
+                won.add(id)
+            if len(won) == len(boards):
+                return d, boards[id]
 
-        new_winners = [(m, b) for m, b in zip(masks, boards) if winner(m)]
-        boards = [b for m, b in zip(masks, boards) if not winner(m)]
-        masks = [m for m in masks if not winner(m)]
-        if len(new_winners) > 0:
-            winners.extend(new_winners)
-            winner_draws.append(d)
-
-    return winners, winner_draws
+    return draws[-1], boards[-1]
 
 
 def first_winner(  # type: ignore
     draws: list[int], boards: list[npt.NDArray[np.int_]]
-) -> tuple[npt.NDArray[np.int_], npt.NDArray[np.bool_], int]:
-    masks = [b < 0 for b in boards]
+) -> tuple[int, npt.NDArray[np.bool_]]:
     for d in draws:
-        masks = [m | (b == d) for m, b in zip(masks, boards)]
-        for i, m in enumerate(masks):
-            if winner(m):
-                return boards[i], masks[i], d
+        for board in boards:
+            board[board == d] = -1
+            if is_winner(board):
+                return d, board
+
+    return -1, boards[0]
 
 
-def winner(m: npt.NDArray[np.bool_]) -> bool:
-    return (m.astype(int).sum(axis=0) == 5).any() or (
-        m.astype(int).sum(axis=1) == 5
-    ).any()
+def is_winner(board: npt.NDArray[np.int_]) -> bool:
+    return (board.sum(axis=0) == -5).any() or (board.sum(axis=1) == -5).any()
 
 
 def get_boards(lines: list[str]) -> list[npt.NDArray[np.int_]]:
