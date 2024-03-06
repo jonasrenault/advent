@@ -75,3 +75,17 @@ def grid_find_adjacent(
 
             for n in neighbors(grid, node):
                 queue.append((1 + dist, n))
+
+
+def manhattan(a: tuple[int, ...], b: tuple[int, ...]) -> int:
+    """
+    Compute the manhattan or taxicab distance between points a and b.
+
+    Args:
+        a (tuple[int, ...]): point a
+        b (tuple[int, ...]): point b
+
+    Returns:
+        int: the manhattan distance
+    """
+    return sum([abs(x - y) for x, y in zip(a, b)])
