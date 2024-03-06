@@ -57,6 +57,6 @@ lint.select = [
 ]
 src = ["advent", "tests"]
 
-[mypy]
+[tool.mypy]
 files = ["advent"]
 exclude = ["templates"]
