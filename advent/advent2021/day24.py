@@ -8,21 +8,30 @@ advent = Advent(24, 2021)
 def main():
     lines = advent.get_input_lines()
     constants = get_constants(lines)
+    constraints = get_constraints(constants)
 
-    number = get_max_number(constants)
+    number = get_max_number(constraints)
     advent.submit(1, number)
 
+    number = get_min_number(constraints)
+    advent.submit(2, number)
 
-def get_max_number(constants: list[tuple[int, int]]) -> int:
-    constraints = []
-    stack: deque[tuple[int, int]] = deque()
-    for i, (a, b) in enumerate(constants):
-        if a > 0:
-            stack.append((i, b))
+
+def get_min_number(constraints: list[tuple[int, int, int]]) -> int:
+    digits = [0] * 14
+    for i, j, diff in constraints:
+        if diff > 0:
+            digits[j], digits[i] = 1, 1 + diff
         else:
-            j, b = stack.pop()
-            constraints.append((i, j, a + b))
+            digits[j], digits[i] = 1 - diff, 1
 
+    num = 0
+    for d in digits:
+        num = num * 10 + d
+    return num
+
+
+def get_max_number(constraints: list[tuple[int, int, int]]) -> int:
     digits = [0] * 14
     for i, j, diff in constraints:
         if diff > 0:
@@ -34,6 +43,19 @@ def get_max_number(constants: list[tuple[int, int]]) -> int:
     for d in digits:
         num = num * 10 + d
     return num
+
+
+def get_constraints(constants: list[tuple[int, int]]) -> list[tuple[int, int, int]]:
+    constraints = []
+    stack: deque[tuple[int, int]] = deque()
+    for i, (a, b) in enumerate(constants):
+        if a > 0:
+            stack.append((i, b))
+        else:
+            j, b = stack.pop()
+            constraints.append((i, j, a + b))
+
+    return constraints
 
 
 def get_constants(lines: list[str]) -> list[tuple[int, int]]:
