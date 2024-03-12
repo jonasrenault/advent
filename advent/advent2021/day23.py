@@ -1,3 +1,4 @@
+from collections import Counter
 from collections.abc import Iterable
 from functools import lru_cache
 from math import inf
@@ -10,14 +11,28 @@ advent = Advent(23, 2021)
 ROOMS = {"A": 3, "B": 5, "C": 7, "D": 9}
 ENTRANCES = ((1, 3), (1, 5), (1, 7), (1, 9))
 ENERGIES = {"A": 1, "B": 10, "C": 100, "D": 1000}
+PODS_2 = (
+    ("D", 3, 3),
+    ("D", 4, 3),
+    ("C", 3, 5),
+    ("B", 4, 5),
+    ("B", 3, 7),
+    ("A", 4, 7),
+    ("A", 3, 9),
+    ("C", 4, 9),
+)
 
 
 def main():
     lines = advent.get_input()
     grid = [[c for c in line] for line in lines.strip("\n").split("\n")]
     pods = get_pods(grid)
-    spaces = free_space(grid)
+    spaces = free_space(pods)
     advent.submit(1, solve(tuple(spaces), tuple(pods)))
+
+    pods = get_pods(grid, PODS_2)
+    spaces = free_space(pods)
+    advent.submit(2, solve(tuple(spaces), tuple(pods)))
 
 
 @lru_cache(maxsize=None)
@@ -49,9 +64,10 @@ def update_pods(
 
 
 def finished(pods: Iterable[tuple[str, int, int]]) -> bool:
+    pods_per_type = Counter(p for p, _, _ in pods).pop("A")
     for p, r in ROOMS.items():
         pods_in_r = pods_in_room(pods, r)
-        if len(pods_in_r) < 2 or not all([p == x for x in pods_in_r]):
+        if len(pods_in_r) < pods_per_type or not all([p == x for x in pods_in_r]):
             return False
     return True
 
@@ -99,6 +115,7 @@ def next_moves(
                     distances[(rr, rc)] = new_dist
                     queue.append((new_dist, (rr, rc)))
 
+    max_r = max(r for r, _ in spaces)
     # then filter these moves
     for (rr, rc), v in distances.items():
         if (rr, rc) == (r, c):
@@ -120,9 +137,8 @@ def next_moves(
             otherpods_in_r = set(pods_in_room(pods, ROOMS[pod])) - set([pod])
             if rc != room or len(otherpods_in_r) > 0:
                 continue
-            if (
-                rr == 2 and (3, rc) not in pod_positions
-            ):  # If entering an empty room, move to the back
+            if any((rrr, rc) not in pod_positions for rrr in range(rr + 1, max_r + 1)):
+                # If entering an empty room, move to the back
                 continue
             return {(rr, rc, v)}
 
@@ -138,21 +154,24 @@ def pods_in_room(pods: Iterable[tuple[str, int, int]], room: int) -> list[str]:
     return [p for p, r, c in pods if c == room and r > 1]
 
 
-def free_space(grid: list[list[str]]) -> set[tuple[int, int]]:
-    spaces = set()
-    for r, row in enumerate(grid):
-        for c, col in enumerate(row):
-            if col in "ABCD.":
-                spaces.add((r, c))
+def free_space(pods: Iterable[tuple[str, int, int]]) -> set[tuple[int, int]]:
+    spaces = {(r, c) for _, r, c in pods}
+    spaces.update([(1, i) for i in range(1, 12)])
     return spaces
 
 
-def get_pods(grid: list[list[str]]) -> set[tuple[str, int, int]]:
+def get_pods(
+    grid: list[list[str]], pods_2: Iterable[tuple[str, int, int]] | None = None
+) -> set[tuple[str, int, int]]:
     pods = set()
     for r, row in enumerate(grid):
         for c, col in enumerate(row):
             if col in "ABCD":
                 pods.add((col, r, c))
+
+    if pods_2 is not None:
+        pods = {(col, r, c) if r == 2 else (col, 5, c) for col, r, c in pods}
+        pods.update(pods_2)
     return pods
 
 
