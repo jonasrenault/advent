@@ -41,10 +41,9 @@ def solve(
     ],
 ) -> set[tuple[int, int]]:
     start = np.where(grid == "S")
-    start = start[0][0], start[1][0]
     n1: set[tuple[int, int]] = set()
     n2: set[tuple[int, int]] = set()
-    current = {start}
+    current = {(start[0][0], start[1][0])}
     for _ in tqdm(range(steps)):
         new_nodes = next_nodes(grid, current, n1, n2, neighbor_f)
         n2 = n1
