@@ -1,6 +1,7 @@
 import re
 
 import numpy as np
+
 from advent.utils.utils import Advent
 
 advent = Advent(3, 2018)
