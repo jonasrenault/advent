@@ -56,6 +56,9 @@ lint.select = [
 ]
 src = ["advent", "tests"]
 
+[tool.ruff.lint.isort]
+known-first-party = ["advent"]
+
 [tool.mypy]
 files = ["advent"]
 exclude = ["templates"]
