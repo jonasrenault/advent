@@ -1,5 +1,5 @@
 import re
-from collections import defaultdict
+from collections import defaultdict, deque
 
 from advent.utils.utils import Advent
 
@@ -8,34 +8,23 @@ advent = Advent(9, 2018)
 
 def main():
     lines = advent.get_input_lines()
-    players, rounds = list(map(int, re.findall(r"([0-9]+)", lines[0])))
+    nb_players, max_marble = list(map(int, re.findall(r"([0-9]+)", lines[0])))
 
-    advent.submit(1, max(play(players, rounds).values()))
+    advent.submit(1, max(play(nb_players, max_marble).values()))
+    advent.submit(2, max(play(nb_players, max_marble * 100).values()))
 
 
-def play(players, rounds) -> dict[int, int]:
+def play(nb_players: int, max_marble: int) -> dict[int, int]:
     scores: dict[int, int] = defaultdict(int)
-    player = 0
-    circle = [0]
-    marble = 1
-    current = 0
-    while marble < rounds:
+    circle = deque([0])
+    for marble in range(1, max_marble + 1):
         if marble % 23 == 0:
-            scores[player] += marble
-            to_pop = (current - 7) % len(circle)
-            scores[player] += circle.pop(to_pop)
-            current = to_pop
+            circle.rotate(7)
+            scores[marble % nb_players] += circle.pop() + marble
+            circle.rotate(-1)
         else:
-            to_insert = (current + 2) % len(circle)
-            if to_insert == 0:
-                circle.append(marble)
-                current = len(circle) - 1
-            else:
-                circle.insert(to_insert, marble)
-                current = to_insert
-
-        marble += 1
-        player = (player + 1) % players
+            circle.rotate(-1)
+            circle.append(marble)
 
     return scores
 
