@@ -1,3 +1,5 @@
+from typing import cast
+
 import numpy as np
 import numpy.typing as npt
 from numpy.lib.stride_tricks import sliding_window_view
@@ -32,8 +34,8 @@ def get_max_block_coords(
     powers: npt.NDArray[np.int_], window_size: int
 ) -> tuple[tuple[int, int], int]:
     blocks = sliding_window_view(powers, (window_size, window_size))
-    sums = np.sum(blocks, axis=(2, 3))
-    coords = np.unravel_index(np.argmax(sums), sums.shape)
+    sums: npt.NDArray[np.int_] = np.sum(blocks, axis=(2, 3))
+    coords = cast(tuple[int, int], np.unravel_index(np.argmax(sums), sums.shape))
     return coords, sums[coords]
 
 
