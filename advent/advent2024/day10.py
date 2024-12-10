@@ -18,6 +18,10 @@ def main():
         1, sum([len(list(climb(grid, start))) for start in zip(*np.where(grid == 0))])
     )
 
+    advent.submit(
+        2, sum([len(list(climb2(grid, start))) for start in zip(*np.where(grid == 0))])
+    )
+
 
 def neighbors(
     grid: npt.NDArray[np.int_], node: tuple[int, int]
@@ -50,6 +54,27 @@ def climb(
 
             for n in neighbors(grid, node):
                 queue.append((1 + dist, n))
+
+
+def climb2(
+    grid: npt.NDArray[np.int_], start: tuple[int, int]
+) -> Iterator[tuple[tuple[int, int], set[tuple[int, int]]]]:
+    visited = {start}
+    queue: deque[tuple[set[tuple[int, int]], tuple[int, int]]] = deque()
+
+    for n in neighbors(grid, start):
+        queue.append((visited, n))
+
+    while queue:
+        visited, node = queue.popleft()
+        if node not in visited:
+            visited.add(node)
+            if grid[node] == 9:
+                yield (node, visited | {node})
+                continue
+
+            for n in neighbors(grid, node):
+                queue.append((visited | {node}, n))
 
 
 if __name__ == "__main__":
