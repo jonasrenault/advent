@@ -63,3 +63,7 @@ known-first-party = ["advent"]
 [tool.mypy]
 files = ["advent"]
 exclude = ["templates"]
+
+[[tool.mypy.overrides]]
+module = "z3.*"
+ignore_missing_imports = true
