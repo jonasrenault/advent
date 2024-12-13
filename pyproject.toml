@@ -12,6 +12,7 @@ python = "^3.12"
 numpy = "^1.26.4"
 requests = "^2.32.3"
 tqdm = "^4.67.0"
+z3-solver = "^4.13.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
