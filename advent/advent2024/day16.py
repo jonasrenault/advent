@@ -1,6 +1,5 @@
 import heapq
-
-# from collections import deque
+import math
 from typing import Iterator
 
 import numpy as np
@@ -20,11 +19,9 @@ def main():
     start = tuple(np.argwhere(grid == "S")[0])
     end = tuple(np.argwhere(grid == "E")[0])
 
-    res = dijkstra(grid, (*start, ">"), end)
-    print(1, res)
-
-    # for cost, path in find_paths(grid, (*start, ">"), end):
-    #     print(cost, len(path))
+    cost, path = find_paths(grid, (*start, ">"), end)
+    advent.submit(1, cost)
+    advent.submit(2, len(path))
 
 
 def neighbors(
@@ -46,56 +43,40 @@ def neighbors(
             yield (rr, rc, d), 1 if d == dir else 1001
 
 
-# def find_paths(
-#     grid: npt.NDArray[np.str_],
-#     src: tuple[int, int, str],
-#     end: tuple[int, int],
-# ) -> Iterator[int]:
-#     visited = {src}
-#     r, c, _ = src
-#     queue: deque[tuple[int, tuple[int, int, str], set[tuple[int, int]]]] = deque()
-
-#     for n, cost in neighbors(grid, src):
-#         queue.append((cost, n, {(r, c)}))
-
-#     while queue:
-#         dist, node, path = queue.popleft()
-#         if node not in visited:
-#             visited.add(node)
-#             r, c, _ = node
-#             if (r, c) == end:
-#                 yield dist, path
-#                 continue
-
-#             for n, cost in neighbors(grid, node):
-#                 queue.append((cost + dist, n, path | {(r, c)}))
-
-
-def dijkstra(
+def find_paths(
     grid: npt.NDArray[np.str_],
     start: tuple[int, int, str],
     end: tuple[int, int],
-) -> int | None:
-    visited = set()
+) -> tuple[float, frozenset[tuple[int, int]]]:
     distance = {start: 0}
-    queue = [(0, start)]
+    best_distance = math.inf
+    best_path: frozenset[tuple[int, int]] = frozenset()
+    r, c, _ = start
+    queue = [(0, start, frozenset([(r, c)]))]
 
     while queue:
-        dist, node = heapq.heappop(queue)
+        dist, node, path = heapq.heappop(queue)
         r, c, _ = node
         if (r, c) == end:
-            return dist
+            if dist < best_distance:
+                best_distance = dist
+                best_path = path
+            elif dist == best_distance:
+                best_path |= path
+            continue
 
-        if node not in visited:
-            visited.add(node)
+        if node in distance and distance[node] < dist:
+            continue
 
-            for neighbor, cost in neighbors(grid, node):
+        distance[node] = dist
+
+        for neighbor, cost in neighbors(grid, node):
+            nr, nc, _ = neighbor
+            if (nr, nc) not in path:
                 new_dist = dist + cost
-                if neighbor not in distance or new_dist < distance[neighbor]:
-                    distance[neighbor] = new_dist
-                    heapq.heappush(queue, (new_dist, neighbor))
+                heapq.heappush(queue, (new_dist, neighbor, path | {(nr, nc)}))
 
-    return None
+    return best_distance, best_path
 
 
 if __name__ == "__main__":
