@@ -41,7 +41,7 @@ def solve(program: tuple[int, ...]) -> int:
     return s.model().eval(orig).as_long()
 
 
-def print_bin_digits(bina: str):
+def bin_digits(bina: str):
     for v in batched(bina[::-1], n=3):
         yield int("".join(v).zfill(3), base=2)
 
@@ -54,7 +54,9 @@ def read_input(lines: list[str]) -> tuple[int, int, int, tuple[int, ...]]:
     return A, B, C, program
 
 
-def run(A: int, B: int, C: int, program: tuple[int, ...], pointer: int):
+def run(
+    A: int, B: int, C: int, program: tuple[int, ...], pointer: int
+) -> tuple[int, int, int, list[int]]:
     output = []
     while pointer < len(program):
         A, B, C, pointer, out = instruction(A, B, C, program, pointer)
@@ -63,7 +65,9 @@ def run(A: int, B: int, C: int, program: tuple[int, ...], pointer: int):
     return A, B, C, output
 
 
-def instruction(A: int, B: int, C: int, program: tuple[int, ...], pointer: int):
+def instruction(
+    A: int, B: int, C: int, program: tuple[int, ...], pointer: int
+) -> tuple[int, int, int, int, int | None]:
     opcode = program[pointer]
     operand = program[pointer + 1]
 
@@ -85,6 +89,8 @@ def instruction(A: int, B: int, C: int, program: tuple[int, ...], pointer: int):
         return A, B ^ C, C, pointer + 2, None
     if opcode == 5:  # out
         return A, B, C, pointer + 2, combo(A, B, C, operand) % 8
+
+    return A, B, C, pointer, None
 
 
 def combo(A: int, B: int, C: int, operand: int) -> int:
