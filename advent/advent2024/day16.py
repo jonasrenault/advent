@@ -25,7 +25,7 @@ def main():
 
 
 def neighbors(
-    grid: npt.NDArray[np.int_],
+    grid: npt.NDArray[np.str_],
     node: tuple[int, int, str],
 ) -> Iterator[tuple[tuple[int, int, str], int]]:
     r, c, dir = node
