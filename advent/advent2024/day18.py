@@ -23,8 +23,12 @@ def main():
 
     for node in corrupted[1024:]:
         grid[node] = "#"
-        if dijkstra(grid, start, end) is None:
+
+    for node in corrupted[::-1]:
+        grid[node] = "."
+        if dijkstra(grid, start, end) is not None:
             break
+
     advent.submit(2, ",".join(map(str, node)))
 
 
