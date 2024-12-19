@@ -16,7 +16,7 @@ def main():
 
 
 @lru_cache(maxsize=None)
-def match(pattern: str, towels: tuple[str]) -> list[tuple[str, ...]]:
+def match(pattern: str, towels: tuple[str, ...]) -> list[tuple[str, ...]]:
     options: list[tuple[str, ...]] = []
     for towel in towels:
         if pattern == towel:
