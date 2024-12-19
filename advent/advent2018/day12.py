@@ -7,19 +7,41 @@ def main():
     lines = advent.get_input_lines()
     state, patterns = read_input(lines)
 
-    _, score = run(state, patterns)
-    advent.submit(1, score)
-
-
-def run(state: str, patterns: dict[str, str]) -> tuple[int, int]:
     offset = 3
     state = "." * offset + state + "." * offset
-    print(str(0).zfill(2), state)
-    for i in range(1, 21):
-        state, offset = apply(state, patterns, offset)
-        print(str(i).zfill(2), state, len(state))
+    state, offset = run(state, patterns, offset, 20)
+    advent.submit(1, score(state, offset))
 
-    return offset, sum([i - offset for i in range(len(state)) if state[i] == "#"])
+    target = 50000000000
+    step, s, diff = find_loop(state, patterns, offset)
+    advent.submit(2, s + diff * (target - step))
+
+
+def find_loop(state: str, patterns: dict[str, str], offset) -> tuple[int, int, int]:
+    step = 100
+    state1, offset = run(state, patterns, offset, step - 2)
+    state2, offset = run(state1, patterns, offset, 1)
+    state3, offset = run(state2, patterns, offset, 1)
+
+    while score(state2, offset) - score(state1, offset) != score(state3, offset) - score(
+        state2, offset
+    ):
+        state1 = state2
+        state2 = state3
+        state3, offset = run(state2, patterns, offset, 1)
+        step += 1
+
+    return step, score(state3, offset), score(state3, offset) - score(state2, offset)
+
+
+def score(state: str, offset: int) -> int:
+    return sum([i - offset for i in range(len(state)) if state[i] == "#"])
+
+
+def run(state: str, patterns: dict[str, str], offset: int, steps: int) -> tuple[str, int]:
+    for _ in range(steps):
+        state, offset = apply(state, patterns, offset)
+    return state, offset
 
 
 def apply(state: str, patterns: dict[str, str], offset: int) -> tuple[str, int]:
