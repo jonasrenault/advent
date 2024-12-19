@@ -41,20 +41,6 @@ def run_to_last(grid: npt.NDArray[np.str_], carts: list[CART]) -> list[CART]:
     return carts
 
 
-def order_carts(c1: CART, c2: CART) -> int:
-    (c1x, c1y), _, _ = c1
-    (c2x, c2y), _, _ = c2
-    if c1x < c2x:
-        return -1
-    if c1x > c2x:
-        return 1
-    if c1y < c2y:
-        return -1
-    if c1y > c2y:
-        return 1
-    return 0
-
-
 def run(
     grid: npt.NDArray[np.str_], carts: list[CART]
 ) -> tuple[list[CART], set[tuple[int, int]]]:
@@ -91,6 +77,20 @@ def move(
     x, y = node
     dx, dy = DIRS[dir]
     return (x + dx, y + dy), dir, rotation
+
+
+def order_carts(c1: CART, c2: CART) -> int:
+    (c1x, c1y), _, _ = c1
+    (c2x, c2y), _, _ = c2
+    if c1x < c2x:
+        return -1
+    if c1x > c2x:
+        return 1
+    if c1y < c2y:
+        return -1
+    if c1y > c2y:
+        return 1
+    return 0
 
 
 def read_input(
