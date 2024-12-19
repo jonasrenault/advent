@@ -11,23 +11,19 @@ def main():
     towels = tuple(lines[0].split(", "))
     patterns = lines[2:]
 
-    # print(match(patterns[0], towels))
     advent.submit(1, len([pattern for pattern in patterns if match(pattern, towels)]))
+    advent.submit(2, sum([match(pattern, towels) for pattern in patterns]))
 
 
 @lru_cache(maxsize=None)
-def match(pattern: str, towels: tuple[str, ...]) -> list[tuple[str, ...]]:
-    options: list[tuple[str, ...]] = []
+def match(pattern: str, towels: tuple[str, ...]) -> int:
+    total = 0
     for towel in towels:
         if pattern == towel:
-            options.append((towel,))
-            break
+            total += 1
         elif pattern.startswith(towel):
-            for subp in match(pattern[len(towel) :], towels):
-                options.append((towel,) + subp)
-                break
-
-    return options
+            total += match(pattern[len(towel) :], towels)
+    return total
 
 
 if __name__ == "__main__":
