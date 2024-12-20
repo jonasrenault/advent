@@ -1,7 +1,10 @@
 import heapq
+from collections import deque
+from typing import Iterator
 
 import numpy as np
 import numpy.typing as npt
+from tqdm import tqdm
 
 from advent.utils.algos import neighbors
 from advent.utils.utils import Advent
@@ -18,23 +21,66 @@ def main():
     grid[end] = "."
 
     _, path = dijkstra(grid, start, end)
-    cheats = find_cheats(grid, path)
-    advent.submit(1, len([node for node, cheat in cheats.items() if cheat >= 100]))
+    cheats = count_cheat_paths(grid, path, cheat_duration=2, minimum_cheat=100)
+    advent.submit(1, len(cheats))
+
+    cheats = count_cheat_paths(grid, path, cheat_duration=20, minimum_cheat=100)
+    advent.submit(2, len(cheats))
 
 
-def find_cheats(
-    grid: npt.NDArray[np.str_], path: list[tuple[int, int]]
-) -> dict[tuple[int, int], int]:
+def count_cheat_paths(
+    grid: npt.NDArray[np.str_],
+    path: list[tuple[int, int]],
+    cheat_duration: int = 2,
+    minimum_cheat: int = 100,
+) -> dict[tuple[tuple[int, int], tuple[int, int]], int]:
     cheats = dict()
     indices = {node: i for i, node in enumerate(path)}
-    for x in range(1, grid.shape[0] - 1):
-        for y in range(1, grid.shape[1] - 1):
-            if grid[(x, y)] == "#":
-                ns = [indices[n] for n in neighbors(grid, (x, y)) if n in indices]
-                if len(ns) > 1 and max(ns) - min(ns) > 2:
-                    cheats[(x, y)] = max(ns) - min(ns) - 2
+    for start in tqdm(path):
+        for end, dist in find_cheat_paths(
+            grid, start, indices, max_distance=cheat_duration
+        ):
+            if indices[end] - indices[start] - dist >= minimum_cheat:
+                cheats[(start, end)] = indices[end] - indices[start] - dist
 
     return cheats
+
+
+def find_cheat_paths(
+    grid: npt.NDArray[np.str_],
+    start: tuple[int, int],
+    indices: dict[tuple[int, int], int],
+    max_distance: int = 20,
+) -> Iterator[tuple[tuple[int, int], int]]:
+    """
+    Find all possible paths starting from start node with maximum distance max_distance
+    which end further on the path.
+
+    Args:
+        grid (npt.NDArray[np.str_]): the grid
+        start (tuple[int, int]): start node
+        indices (dict[tuple[int, int], int]): dict of path node -> index on path
+        max_distance (int, optional): maximum distance. Defaults to 20.
+
+    Yields:
+        Iterator[tuple[tuple[int, int], int]]: all nodes within max_distance of start
+    """
+    visited = {start}
+    queue: deque[tuple[int, tuple[int, int]]] = deque()
+
+    for n in neighbors(grid, start):
+        queue.append((1, n))
+
+    while queue:
+        dist, node = queue.popleft()
+        if node not in visited and dist <= max_distance:
+            visited.add(node)
+            if node in indices and indices[node] > indices[start]:
+                yield ((node), dist)
+                # continue
+
+            for n in neighbors(grid, node):
+                queue.append((1 + dist, n))
 
 
 def dijkstra(
