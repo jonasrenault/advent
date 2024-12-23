@@ -1,7 +1,7 @@
 import heapq
 import math
-from itertools import product
-from typing import Iterator
+from functools import lru_cache
+from typing import Iterator, Literal
 
 import numpy as np
 import numpy.typing as npt
@@ -11,55 +11,35 @@ from advent.utils.utils import Advent
 advent = Advent(21, 2024)
 DIR = {"^": (-1, 0), ">": (0, 1), "<": (0, -1), "v": (1, 0)}
 
+PADS: dict[str, npt.NDArray[np.str_]] = {
+    "numeric": np.array(
+        [["7", "8", "9"], ["4", "5", "6"], ["1", "2", "3"], ["#", "0", "A"]]
+    ),
+    "directional": np.array([["#", "^", "A"], ["<", "v", ">"]]),
+}
+
 
 def main():
     lines = advent.get_input_lines()
-    numeric = np.array(
-        [["7", "8", "9"], ["4", "5", "6"], ["1", "2", "3"], ["#", "0", "A"]]
-    )
-    directional = np.array([["#", "^", "A"], ["<", "v", ">"]])
 
-    complexities = {}
-    for code in lines:
-        complexities[code] = len(find_user_sequence(code, numeric, directional)[0])
-        print(code, complexities[code])
-    # complexities = {
-    #     code: len(find_user_sequence(code, numeric, directional)[0]) for code in lines
-    # }
-    advent.submit(1, sum([int(code[:-1]) * val for code, val in complexities.items()]))
+    advent.submit(1, sum(int(code[:-1]) * solve("numeric", 2, code) for code in lines))
+    advent.submit(2, sum(int(code[:-1]) * solve("numeric", 25, code) for code in lines))
 
 
-def find_user_sequence(
-    code: str, numeric: npt.NDArray[np.str_], directional: npt.NDArray[np.str_]
-) -> list[list[str]]:
-    seqs1 = find_sequence(
-        numeric,
-        code,
-    )
-    seqs2 = []
-    for seq1 in seqs1:
-        seqs2.extend(find_sequence(directional, "".join(seq1)))
-    minl = min([len(s) for s in seqs2])
-    seqs2 = [s for s in seqs2 if len(s) == minl]
+@lru_cache(maxsize=None)
+def solve(keypad: str, robot: int, code: str, current: str = "A"):
+    if not code:
+        return 0
 
-    seqs3 = []
-    for seq2 in seqs2:
-        seqs3.extend(find_sequence(directional, "".join(seq2)))
-    minl = min([len(s) for s in seqs3])
-    seqs3 = [s for s in seqs3 if len(s) == minl]
-    return seqs3
+    target = code[0]
+    paths = find_paths(keypad, current, target)
 
+    if robot == 0:
+        best = len(paths[0]) + 1
+    else:
+        best = min(solve("directional", robot - 1, p + "A") for p in paths)
 
-def find_sequence(keypad: npt.NDArray[np.str_], input: str) -> list[list[str]]:
-    res: list[list[str]] = []
-    start = tuple(np.argwhere(keypad == "A")[0])
-    for target in input:
-        _, paths = find_paths(keypad, start, target)
-        if not res:
-            res = [path + ["A"] for path in paths]
-        else:
-            res = [res + path + ["A"] for res, path in product(res, paths)]
-        start = tuple(np.argwhere(keypad == target)[0])
+    res = best + solve(keypad, robot, code[1:], target)
     return res
 
 
@@ -75,15 +55,18 @@ def neighbors(
             yield dir, (rr, rc)
 
 
+@lru_cache(maxsize=None)
 def find_paths(
-    grid: npt.NDArray[np.str_],
-    start: tuple[int, int],
+    pad: Literal["numeric", "directionnal"],
+    start: str,
     target: str,
-) -> tuple[float, list[list[str]]]:
-    distance = {start: 0}
+) -> list[str]:
+    grid = PADS[pad]
+    src = tuple(np.argwhere(grid == start)[0])
+    distance = {src: 0}
     best_distance = math.inf
-    best_paths: list[list[str]] = []
-    queue: list[tuple[int, tuple[int, int], list[str]]] = [(0, start, [])]
+    best_paths: list[str] = []
+    queue: list[tuple[int, tuple[int, int], str]] = [(0, src, "")]
 
     while queue:
         dist, node, path = heapq.heappop(queue)
@@ -103,9 +86,9 @@ def find_paths(
         for dir, neighbor in neighbors(grid, node):
             if grid[neighbor] != "#":
                 new_dist = dist + 1
-                heapq.heappush(queue, (new_dist, neighbor, path + [dir]))
+                heapq.heappush(queue, (new_dist, neighbor, path + dir))
 
-    return best_distance, best_paths
+    return best_paths
 
 
 if __name__ == "__main__":
