@@ -1,7 +1,6 @@
 import operator
 from collections.abc import Callable
 from copy import copy
-from typing import cast
 
 from advent.utils.utils import Advent
 
@@ -40,7 +39,7 @@ def swap_output_wires(wire_a: str, wire_b: str, gates: list[GATE]):
     return swaped
 
 
-def check_parallel_adders(wires: set[str], gates: list[GATE]) -> set[str | None]:
+def check_parallel_adders(wires: set[str], gates: list[GATE]) -> set[str]:
     """
     Check that the gates form a binary adder
     (https://www.electronics-lab.com/article/binary-adder/)
@@ -50,7 +49,7 @@ def check_parallel_adders(wires: set[str], gates: list[GATE]) -> set[str | None]
         gates (list[GATE]): list of gates
 
     Returns:
-        set[str | None]: set of wires to swap
+        set[str]: set of wires to swap
     """
     zgates = sorted([wire for wire in wires if wire.startswith("z")])
     bits = int(zgates[-1][1:])
@@ -68,13 +67,13 @@ def check_parallel_adders(wires: set[str], gates: list[GATE]) -> set[str | None]
         else:
             ab_xor_gate = find_gate(x_wire, y_wire, "XOR", gates)
             ab_and_gate = find_gate(x_wire, y_wire, "AND", gates)
+            assert ab_xor_gate is not None
+            assert ab_and_gate is not None
             cin_ab_xor_gate = find_gate(ab_xor_gate, current_carry_wire, "XOR", gates)
             if cin_ab_xor_gate is None:
                 wrong.add(ab_xor_gate)
                 wrong.add(ab_and_gate)
-                gates = swap_output_wires(
-                    cast(str, ab_xor_gate), cast(str, ab_xor_gate), gates
-                )
+                gates = swap_output_wires(ab_xor_gate, ab_xor_gate, gates)
                 continue
             if cin_ab_xor_gate != z_wire:
                 wrong.add(cin_ab_xor_gate)
