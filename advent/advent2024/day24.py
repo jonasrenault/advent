@@ -40,7 +40,18 @@ def swap_output_wires(wire_a: str, wire_b: str, gates: list[GATE]):
     return swaped
 
 
-def check_parallel_adders(wires: set[str], gates: list[GATE]):
+def check_parallel_adders(wires: set[str], gates: list[GATE]) -> set[str | None]:
+    """
+    Check that the gates form a binary adder
+    (https://www.electronics-lab.com/article/binary-adder/)
+
+    Args:
+        wires (set[str]): list of wires
+        gates (list[GATE]): list of gates
+
+    Returns:
+        set[str | None]: set of wires to swap
+    """
     zgates = sorted([wire for wire in wires if wire.startswith("z")])
     bits = int(zgates[-1][1:])
     current_carry_wire = None
