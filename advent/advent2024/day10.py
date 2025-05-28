@@ -4,8 +4,7 @@ from typing import Iterator
 import numpy as np
 import numpy.typing as npt
 
-from advent.utils.algos import deltas_4
-from advent.utils import Advent
+from advent.utils import Advent, deltas_4
 
 advent = Advent(10, 2024)
 

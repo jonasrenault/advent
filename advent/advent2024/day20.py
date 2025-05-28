@@ -6,8 +6,7 @@ import numpy as np
 import numpy.typing as npt
 from tqdm import tqdm
 
-from advent.utils.algos import neighbors
-from advent.utils import Advent
+from advent.utils import Advent, neighbors
 
 advent = Advent(20, 2024)
 

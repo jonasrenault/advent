@@ -3,8 +3,7 @@ from collections.abc import Iterable
 from functools import lru_cache
 from math import inf
 
-from advent.utils.algos import deltas_4
-from advent.utils import Advent
+from advent.utils import Advent, deltas_4
 
 advent = Advent(23, 2021)
 

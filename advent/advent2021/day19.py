@@ -2,8 +2,7 @@ from collections import defaultdict
 from itertools import permutations, product
 from typing import TypeAlias
 
-from advent.utils.algos import manhattan
-from advent.utils import Advent
+from advent.utils import Advent, manhattan
 
 advent = Advent(19, 2021)
 

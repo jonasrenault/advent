@@ -5,8 +5,7 @@ from math import inf
 import numpy as np
 import numpy.typing as npt
 
-from advent.utils.algos import neighbors
-from advent.utils import Advent
+from advent.utils import Advent, neighbors
 
 advent = Advent(15, 2021)
 

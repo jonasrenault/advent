@@ -2,7 +2,7 @@ import numpy as np
 import numpy.typing as npt
 import pytest
 
-from advent.utils.algos import neighbors, neighbors8
+from advent.utils import neighbors, neighbors8
 
 
 @pytest.fixture

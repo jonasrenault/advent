@@ -1,8 +1,7 @@
 from collections import defaultdict
 from operator import itemgetter
 
-from advent.utils.algos import manhattan
-from advent.utils import Advent
+from advent.utils import Advent, manhattan
 
 advent = Advent(6, 2018)
 
