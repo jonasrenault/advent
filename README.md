@@ -2,12 +2,22 @@
 
 Repository of my code for [Advent of Code](https://adventofcode.com/)
 
-## Install
+## Install from github
 
-Install project with its dependencies with [poetry](https://python-poetry.org/):
+Clone the repository and install the project in your python environment, either using `pip`
 
-```console
-poetry install
+```bash
+git clone git@github.com:jonasrenault/advent.git
+cd advent
+pip install --editable .
+```
+
+or [uv](https://docs.astral.sh/uv/)
+
+```bash
+git clone git@github.com:jonasrenault/advent.git
+cd advent
+uv sync
 ```
 
 ## Session
@@ -18,16 +28,18 @@ To get the code to work with your puzzle input, you need to be logged in using y
 
 Each day's problem is solved in its own python module in a package corresponding to the year in the [advent](./advent/) directory. To run a solution, run
 
-```console
-poetry run python advent/advent2023/day01.py
+```bash
+python advent/advent2023/day01.py
 ```
+
+(prefix with `uv run` if using [uv](https://docs.astral.sh/uv/)).
 
 ## Template generation
 
-To generate a blank template for a new day, a template generator can be used with
+A CLI is provided to generate a blank template for a new day. Run
 
-```console
-poetry run python advent/utils/templates.py -y 2023 -d 1
+```bash
+advent -y 2023 -d 1
 ```
 
 where the `-y` option specifies the year and `-d` specifies the day to generate a template for.
