@@ -8,16 +8,16 @@ advent = Advent(9)
 dirs = {"R": (1, 0), "L": (-1, 0), "U": (0, 1), "D": (0, -1)}
 
 
-def main():
+def main() -> None:
     lines = advent.get_input_lines()
-    cmds: list[tuple[str, str]] = [tuple(line.split()) for line in lines]
+    cmds: list[tuple[str, ...]] = [tuple(line.split()) for line in lines]
     positions = run(cmds)
     advent.submit(1, len(positions))
 
     advent.submit(2, len(run_knots(cmds)))
 
 
-def run_knots(cmds: list[tuple[str, str]]) -> set[tuple[int, int]]:
+def run_knots(cmds: list[tuple[str, ...]]) -> set[tuple[int, int]]:
     knots = [np.array((0, 0)) for _ in range(10)]
     positions = set()
     positions.add((0, 0))
@@ -28,8 +28,8 @@ def run_knots(cmds: list[tuple[str, str]]) -> set[tuple[int, int]]:
 
 
 def step_knots(
-    knots: list[npt.NDArray[np.int_]],
-    s: tuple[str, str],
+    knots: list[npt.NDArray[np.integer]],
+    s: tuple[str, ...],
     positions: set[tuple[int, int]],
 ):
     d, u = s
@@ -48,10 +48,10 @@ def step_knots(
             else:
                 moved = False
             if i == 10:
-                positions.add(tuple(knots[i - 1]))
+                positions.add(tuple(knots[i - 1]))  # type: ignore
 
 
-def run(cmds: list[tuple[str, str]]) -> set[tuple[int, int]]:
+def run(cmds: list[tuple[str, ...]]) -> set[tuple[int, int]]:
     H = (0, 0)
     T = (0, 0)
     positions = set()
@@ -65,7 +65,7 @@ def run(cmds: list[tuple[str, str]]) -> set[tuple[int, int]]:
 def step(
     H: tuple[int, int],
     T: tuple[int, int],
-    s: tuple[str, str],
+    s: tuple[str, ...],
     positions: set[tuple[int, int]],
 ) -> tuple[tuple[int, int], tuple[int, int]]:
     d, u = s

@@ -29,10 +29,10 @@ def main():
     )
 
 
-def rating(inputs: npt.NDArray[np.int_], op: Callable[[float, float], bool]):
+def rating(inputs: npt.NDArray[np.integer], op: Callable[[float, float], bool]):
     col = 0
     while len(inputs) > 1:
-        if op(np.mean(inputs[:, col]), 0.5):
+        if op(np.mean(inputs[:, col]), 0.5):  # type: ignore
             inputs = inputs[inputs[:, col] == 1, :]
         else:
             inputs = inputs[inputs[:, col] == 0, :]

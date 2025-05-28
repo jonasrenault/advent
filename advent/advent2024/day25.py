@@ -47,10 +47,10 @@ def grid_to_heights(item: npt.NDArray[np.str_]) -> tuple[bool, tuple[int, ...]]:
     heights = []
     if item[0, 0] == "#":
         for c in range(item.shape[1]):
-            heights.append(max(np.argwhere(item[:, c] == "#"))[0])
+            heights.append(max(np.argwhere(item[:, c] == "#"))[0])  # type: ignore
         return True, tuple(heights)
     for c in range(item.shape[1]):
-        heights.append(5 - max(np.argwhere(item[:, c] == "."))[0])
+        heights.append(5 - max(np.argwhere(item[:, c] == "."))[0])  # type: ignore
     return False, tuple(heights)
 
 

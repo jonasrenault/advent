@@ -37,7 +37,7 @@ def main():
 
 
 def count_rounds(
-    grid: npt.NDArray[np.int_], neighbors: deque[list[tuple[int, int]]]
+    grid: npt.NDArray[np.integer], neighbors: deque[list[tuple[int, int]]]
 ) -> int:
     count = 0
     moved = True
@@ -49,7 +49,7 @@ def count_rounds(
 
 
 def find_empty_tiles(
-    grid: npt.NDArray[np.int_], neighbors: deque[list[tuple[int, int]]], moves: int
+    grid: npt.NDArray[np.integer], neighbors: deque[list[tuple[int, int]]], moves: int
 ):
     neighbors = deque(
         [
@@ -67,7 +67,7 @@ def find_empty_tiles(
     return np.count_nonzero(slice == 0)
 
 
-def move(grid: npt.NDArray[np.int_], neighbors: deque[list[tuple[int, int]]]) -> bool:
+def move(grid: npt.NDArray[np.integer], neighbors: deque[list[tuple[int, int]]]) -> bool:
     elves = np.where(grid == 1)
     propositions = defaultdict(list)
     for x, y in zip(elves[0], elves[1]):
@@ -88,7 +88,7 @@ def move(grid: npt.NDArray[np.int_], neighbors: deque[list[tuple[int, int]]]) ->
     return moved
 
 
-def has_neighbor(grid: npt.NDArray[np.int_], coords: tuple[int, int]):
+def has_neighbor(grid: npt.NDArray[np.integer], coords: tuple[np.integer, np.integer]):
     x, y = coords
     for a, b in [(-1, 0), (-1, -1), (-1, 1), (1, 0), (1, -1), (1, 1), (0, 1), (0, -1)]:
         if 0 <= (x + a) < grid.shape[0] and 0 <= (y + b) < grid.shape[1]:
@@ -97,7 +97,7 @@ def has_neighbor(grid: npt.NDArray[np.int_], coords: tuple[int, int]):
     return False
 
 
-def get_grid(lines: list[str]) -> npt.NDArray[np.int_]:
+def get_grid(lines: list[str]) -> npt.NDArray[np.integer]:
     grid = np.array([[0 if c == "." else 1 for c in line] for line in lines], dtype=int)
     grid = np.concatenate(
         [
