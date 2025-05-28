@@ -34,12 +34,16 @@ python advent/advent2023/day01.py
 
 (prefix with `uv run` if using [uv](https://docs.astral.sh/uv/)).
 
+## Usage
+
+The [Advent](./advent/utils/utils.py) class in the `advent.utils.utils` module is used to get the input for a day's problem and submit solutions.
+
 ## Template generation
 
 A CLI is provided to generate a blank template for a new day. Run
 
 ```bash
-advent -y 2023 -d 1
+advent template [YEAR] [DAY]
 ```
 
-where the `-y` option specifies the year and `-d` specifies the day to generate a template for.
+(prefix with `uv run` if using [uv](https://docs.astral.sh/uv/)) and replace `[YEAR]` and `[DAY]` with the year and day you want to generate a template for.

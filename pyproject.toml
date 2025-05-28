@@ -24,12 +24,14 @@ dependencies = [
 "Homepage" = "https://github.com/jonasrenault/advent#readme"
 "Repository" = "https://github.com/jonasrenault/advent"
 
+[project.scripts]
+advent = "advent.utils.cli:app"
+
 [project.optional-dependencies]
 stubs = [
     "types-requests>=2.32.0.20250515",
     "types-tqdm>=4.67.0.20250516",
 ]
-
 
 [dependency-groups]
 dev = [

@@ -1,15 +1,11 @@
 import logging
 import re
-import sys
 from pathlib import Path
 
 import requests
 
 # Setup basic logging on import
 LOGGER = logging.getLogger(__name__)
-logging.basicConfig(
-    stream=sys.stdout, level=logging.INFO, format="[advent] %(levelname)s: %(message)s"
-)
 
 
 # AOC server url
