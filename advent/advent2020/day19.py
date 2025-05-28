@@ -1,6 +1,6 @@
 from itertools import product
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(19, 2020)
 

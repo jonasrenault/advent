@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 from itertools import product
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(14, 2020)
 

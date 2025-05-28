@@ -1,6 +1,6 @@
 from math import cos, radians, sin
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(12, 2020)
 

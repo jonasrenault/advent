@@ -1,6 +1,6 @@
 from math import prod
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(1, 2020)
 

@@ -1,6 +1,6 @@
 import re
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(7, 2020)
 

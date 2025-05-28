@@ -1,7 +1,7 @@
 import math
 import re
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(2, 2023)
 

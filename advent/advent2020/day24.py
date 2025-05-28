@@ -3,7 +3,7 @@ from collections.abc import Iterator
 
 from tqdm import tqdm
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(24, 2020)
 

@@ -1,4 +1,4 @@
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(14, 2018)
 

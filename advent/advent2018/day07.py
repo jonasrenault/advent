@@ -3,7 +3,7 @@ import re
 from collections import defaultdict
 from string import ascii_uppercase
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(7, 2018)
 

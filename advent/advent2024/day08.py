@@ -3,7 +3,7 @@ from itertools import combinations
 import numpy as np
 import numpy.typing as npt
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(8, 2024)
 

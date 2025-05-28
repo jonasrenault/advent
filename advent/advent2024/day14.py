@@ -1,7 +1,7 @@
 import re
 
 from advent.utils.algos import deltas_4
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(14, 2024)
 

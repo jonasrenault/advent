@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 from itertools import combinations
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(23, 2024)
 

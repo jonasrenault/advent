@@ -1,7 +1,7 @@
 from collections import defaultdict
 from math import prod
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(3, 2023)
 

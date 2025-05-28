@@ -1,6 +1,6 @@
 from math import ceil, sqrt
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(25, 2020)
 

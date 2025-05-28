@@ -2,7 +2,7 @@ import json
 from itertools import batched
 from typing import Any
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(13)
 

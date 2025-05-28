@@ -3,7 +3,7 @@ from collections.abc import Iterator
 from functools import lru_cache
 from itertools import product
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(21, 2021)
 

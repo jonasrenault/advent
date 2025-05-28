@@ -3,7 +3,7 @@ from itertools import permutations, product
 from typing import TypeAlias
 
 from advent.utils.algos import manhattan
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(19, 2021)
 
@@ -27,7 +27,7 @@ def main():
 
 
 def find_positions(
-    scanners: dict[int, set[Point]]
+    scanners: dict[int, set[Point]],
 ) -> tuple[dict[int, Point], set[Point]]:
     """
     Find positions of scanners and beacons relative to scanner 0's position.

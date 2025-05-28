@@ -4,7 +4,7 @@ import numpy as np
 import numpy.typing as npt
 from numpy.lib.stride_tricks import sliding_window_view
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(11, 2018)
 

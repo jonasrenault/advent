@@ -5,7 +5,7 @@ from math import lcm
 
 from tqdm import tqdm
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(20, 2023)
 

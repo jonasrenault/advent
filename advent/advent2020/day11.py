@@ -2,7 +2,7 @@ from collections.abc import Callable, Iterator, Sequence
 from typing import Any
 
 from advent.utils.algos import neighbors8
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(11, 2020)
 

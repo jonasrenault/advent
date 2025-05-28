@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(19, 2024)
 

@@ -3,7 +3,7 @@ import re
 import numpy as np
 import numpy.typing as npt
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(22, 2021)
 
@@ -26,7 +26,7 @@ def volume(cube: tuple[int, ...]) -> int:
 
 
 def reboot(
-    instructions: list[tuple[bool, tuple[int, ...]]]
+    instructions: list[tuple[bool, tuple[int, ...]]],
 ) -> tuple[list[tuple[int, ...]], list[tuple[int, ...]]]:
     positive: list[tuple[int, ...]] = []
     negative: list[tuple[int, ...]] = []

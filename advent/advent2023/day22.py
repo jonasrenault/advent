@@ -4,7 +4,7 @@ from collections import defaultdict, deque
 from itertools import product
 from string import ascii_uppercase
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(22, 2023)
 

@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict, deque
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(9, 2018)
 

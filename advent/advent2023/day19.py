@@ -3,7 +3,7 @@ from collections.abc import Callable
 from math import prod
 from typing import Any
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(19, 2023)
 

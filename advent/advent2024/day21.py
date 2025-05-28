@@ -6,7 +6,7 @@ from typing import Iterator, Literal
 import numpy as np
 import numpy.typing as npt
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(21, 2024)
 DIR = {"^": (-1, 0), ">": (0, 1), "<": (0, -1), "v": (1, 0)}

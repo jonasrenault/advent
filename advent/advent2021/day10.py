@@ -1,7 +1,7 @@
 import statistics
 from functools import reduce
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(10, 2021)
 

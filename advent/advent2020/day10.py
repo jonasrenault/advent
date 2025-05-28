@@ -1,7 +1,7 @@
 from functools import lru_cache
 from math import prod
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(10, 2020)
 

@@ -1,6 +1,6 @@
 import functools
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(11, 2024)
 

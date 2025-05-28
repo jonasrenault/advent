@@ -3,7 +3,7 @@ from itertools import product
 from operator import add, mul
 from typing import Any
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(7, 2024)
 

@@ -2,7 +2,7 @@ from collections import deque
 
 from tqdm import tqdm
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(22, 2024)
 

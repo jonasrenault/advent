@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from math import prod
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(16, 2021)
 

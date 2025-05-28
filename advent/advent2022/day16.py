@@ -5,7 +5,7 @@ from collections.abc import Iterable
 import numpy as np
 import numpy.typing as npt
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(16)
 
@@ -84,7 +84,7 @@ def get_flows_and_tunnels(
 
 
 def compute_distances(
-    tunnels: dict[str, list[str]]
+    tunnels: dict[str, list[str]],
 ) -> tuple[npt.NDArray[np.int_], list[str]]:
     names = list(tunnels.keys())
     d = np.full((len(names), len(names)), 100)

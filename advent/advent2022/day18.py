@@ -1,7 +1,7 @@
 from collections import deque
 from collections.abc import Iterable
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(18)
 

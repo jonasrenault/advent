@@ -2,7 +2,7 @@ import operator
 from collections.abc import Callable
 from copy import copy
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(24, 2024)
 

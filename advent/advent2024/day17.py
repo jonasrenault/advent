@@ -2,7 +2,7 @@ from itertools import batched
 
 import z3
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(17, 2024)
 

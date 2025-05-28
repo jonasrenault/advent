@@ -4,7 +4,7 @@ import numpy as np
 import numpy.typing as npt
 
 from advent.utils.algos import neighbors
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(18, 2024)
 

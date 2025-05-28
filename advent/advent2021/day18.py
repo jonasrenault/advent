@@ -6,7 +6,7 @@ from typing import Any
 
 from tqdm import tqdm
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(18, 2021)
 

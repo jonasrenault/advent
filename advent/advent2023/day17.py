@@ -4,7 +4,7 @@ from collections.abc import Iterator
 import numpy as np
 import numpy.typing as npt
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(17, 2023)
 

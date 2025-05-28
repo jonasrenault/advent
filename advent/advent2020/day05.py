@@ -1,6 +1,6 @@
 from math import ceil, floor
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(5, 2020)
 

@@ -2,7 +2,7 @@ import math
 from functools import reduce
 from typing import Callable
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(8, 2023)
 

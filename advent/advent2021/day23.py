@@ -4,7 +4,7 @@ from functools import lru_cache
 from math import inf
 
 from advent.utils.algos import deltas_4
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(23, 2021)
 

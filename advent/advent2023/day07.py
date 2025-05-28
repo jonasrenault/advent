@@ -1,7 +1,7 @@
 from collections import Counter
 from functools import cmp_to_key
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(7, 2023)
 

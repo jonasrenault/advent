@@ -1,6 +1,6 @@
 from math import lcm
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(13, 2020)
 

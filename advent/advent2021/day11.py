@@ -4,7 +4,7 @@ import numpy as np
 import numpy.typing as npt
 from tqdm import tqdm
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(11, 2021)
 

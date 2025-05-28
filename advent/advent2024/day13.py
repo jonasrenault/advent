@@ -3,7 +3,7 @@ from collections import defaultdict
 
 import z3
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(13, 2024)
 

@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
 
-from advent.utils.utils import Advent
+from advent.utils import Advent
 
 advent = Advent(5)
 
