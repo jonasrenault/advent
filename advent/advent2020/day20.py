@@ -68,7 +68,7 @@ def find_monsters(pattern: str, image: npt.NDArray[np.str_]) -> int:
             break
 
     # count number of # not in patterns
-    water_cells = np.count_nonzero(image == "#")
+    water_cells = np.count_nonzero(image == "#").item()
     monster_cells = len(deltas)
     roughness = water_cells - monsters * monster_cells
     return roughness
